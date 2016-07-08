@@ -32,9 +32,8 @@ master$msisdn<-(gsub("[[:punct:]]","",master$msisdn))
 alloc$msisdn<-as.character(alloc$msisdn)
 dat<-full_join(master, alloc)
 
-#spot check 
+#Rename treatment variable
+dat<-rename(dat,address_treat = Name)
+
+#Spot check 
 select(dat,raw_user_address,raw_user_address_2,msisdn,Name)[c(225:250,1325:1350),]
-
-
-
-
