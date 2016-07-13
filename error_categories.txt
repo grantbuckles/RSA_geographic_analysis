@@ -2,13 +2,16 @@ Proposed classification scheme
 
 10) Complete address 
 
-21) Incomplete - Number only
-22) Incomplete - Number + street name
-23) Incomplete - Ward number only
-24) Incomplete - City name only
+21) Incomplete - P.O. Box only
+22) Incomplete - Ward number only
+23) Incomplete - Zip code only (4 digit number only)
+24) Incomplete - Number only
+25) Incomplete - Number + street name
+26) Incomplete - City name only
 
+30) Incorrect - Entered phone number (10 digits) 
 31) Incorrect - Misspelling
-32) Incorrect - Wrong format
+33) Incorrect - Wrong format
 
 41) Other - Random characters 
 42) Other - Negative response (i.e. cursing)
