@@ -6,6 +6,11 @@
 
 library(stringr)
 
+sum(dat$raw_user_address != "")
+#observations in raw_user_address to code: 21927 
+sum(dat$raw_user_address_2 != "")
+#observations in raw_user_address_2 to code: 1265
+
 #Incomplete: only a P.O. Box was entered---------------------------------------
 box_strings <- c("^p o box [0-9]+$", "^p\\.o box [0-9]+$", 
                  "^p\\.o\\.box [0-9]+$", "^po box [0-9]+$", 
@@ -38,24 +43,22 @@ incomplete_3 <- function(x){
 dat$zipcode_only <- incomplete_3(dat$raw_user_address)
 
 summary(dat$zipcode_only)
-select(filter(dat, zipcode_only == TRUE), raw_user_address)
+select(sample_n(filter(dat, zipcode_only == TRUE), 50), raw_user_address)
 
 #Incomplete: only a street number was entered----------------------------------
-addnum_strings <- c("^([0-9]+).$")
-#exclude zip codes and phone numbers
-excludenum_strings <- c("^[0-9]{4}$", "^[0-9]{10}$")
+addnum_strings <- c("^[0-9]{1,3}$")
 
 incomplete_4 <- function(x){
-  grepl(paste(addnum_strings, collapse = "|"), x) & 
-  !grepl(paste(excludenum_strings, collapse = "|"), x)
+  grepl(paste(addnum_strings, collapse = "|"), x)
 }
 dat$stnum_only <- incomplete_4(dat$raw_user_address)
 
 summary(dat$stnum_only)
-select(filter(dat, stnum_only == TRUE), raw_user_address)[0:100,]
-#need to exlude large numbers too
+select(sample_n(filter(dat, stnum_only == TRUE), 50), raw_user_address)
 
-#Incorrect: a phone number was entered----------------------------------
+
+
+#Incorrect: a phone number was entered-----------------------------------------
 phonenum_strings <- c("^[0-9]{10}$")
 
 incomplete_10 <- function(x){
@@ -64,5 +67,18 @@ incomplete_10 <- function(x){
 dat$phone_address <- incomplete_10(dat$raw_user_address)
 
 summary(dat$phone_address)
-select(filter(dat, phone_address == TRUE), raw_user_address)
+select(sample_n(filter(dat, phone_address == TRUE), 50), raw_user_address)
 
+#Incorrect: a random number was entered (not a street number or phone number---
+addnum_strings <- c("^[0-9]{5,15}$")
+#exclude phone numbers
+excludenum_strings <- c("^[0-9]{10}$")
+
+incomplete_11 <- function(x){
+  grepl(paste(addnum_strings, collapse = "|"), x) & 
+  !grepl(paste(excludenum_strings, collapse = "|"), x)
+}
+dat$random_num <- incomplete_11(dat$raw_user_address)
+
+summary(dat$random_num)
+select(sample_n(filter(dat, random_num == TRUE), 50), raw_user_address)
