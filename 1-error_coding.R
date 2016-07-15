@@ -1,7 +1,7 @@
 ##################
 # Geographic Randomization - Coding
 # Created by Grant Buckles
-# Last Updated July 13, 2016
+# Last Updated July 15, 2016
 ##################
 
 library(stringr)
@@ -34,7 +34,7 @@ dat$ward_only <- incomplete_2(dat$raw_user_address)
 summary(dat$ward_only)
 select(filter(dat, ward_only == TRUE), raw_user_address)
 
-#Incomplete: only a zip code was entered-----------------------------------------
+#Incomplete: only a zip code was entered---------------------------------------
 zip_strings <- c("^[0-9]{4}$")
 
 incomplete_3 <- function(x){
@@ -58,7 +58,7 @@ select(sample_n(filter(dat, stnum_only == TRUE), 50), raw_user_address)
 
 
 
-#Incorrect: a phone number was entered-----------------------------------------
+#Incorrect: a phone number was entered (10 digits)-----------------------------
 phonenum_strings <- c("^[0-9]{10}$")
 
 incomplete_10 <- function(x){
