@@ -1,7 +1,7 @@
 ##################
 # Geographic Randomization - Coding
 # Created by Grant Buckles
-# Last Updated July 15, 2016
+# Last Updated August 17, 2016
 ##################
 
 library(stringr)
@@ -10,6 +10,44 @@ sum(dat$raw_user_address != "")
 #observations in raw_user_address to code: 21927 
 sum(dat$raw_user_address_2 != "")
 #observations in raw_user_address_2 to code: 1265
+
+#Successful entries (i.e. those successfully assigned a value for "ward") 
+successes <- select(filter(dat, ward != "", ward != "unknown"), 
+                    raw_user_address, raw_user_address_2, ward)
+
+##First, some of these successes are erroneous - namely those based off of 
+#entries of numbers that are uninformative (i.e. not zip codes or ward numbers)
+
+false_1 <- function(x){
+  grepl("^[0-9]{1,3}$", x)
+}
+successes$false_success <- false_1(successes$raw_user_address)
+successes <- filter(successes, false_success == "FALSE")
+
+#success on first try----------------------------------------------------------
+success_1 <- function(x){
+  !grepl(" ", x)
+}
+successes$initial_entry <- success_1(successes$raw_user_address_2)
+summary(successes$initial_entry)
+#4337 successes on first try
+
+#success on second try---------------------------------------------------------
+success_2 <- function(x){
+  grepl(" ", x)
+}
+successes$second_entry <- success_2(successes$raw_user_address_2)
+
+select(filter(successes, second_entry == TRUE), raw_user_address_2)
+#272 additional successes after second try
+
+
+
+
+
+
+
+
 
 #Incomplete: only a P.O. Box was entered---------------------------------------
 box_strings <- c("^p o box [0-9]+$", "^p\\.o box [0-9]+$", 
