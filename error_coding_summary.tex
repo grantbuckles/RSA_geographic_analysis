@@ -1,0 +1,43 @@
+\documentclass[12pt]{article}
+\usepackage{geometry} 
+\geometry{letterpaper}
+\geometry{margin=1in}
+
+
+\begin{document}
+
+\section{Classification of User Errors}
+Total entries from first attempt (raw\_user\_address): 21,927
+\\Total entries from second attempt (raw\_user\_address\_2): 1,265
+
+\section{Successful Entries}
+The first step is to remove all of entries that successfully returned an address (ward != blank). Overall, there were  5,475 successes on the first attempt and additional 302 successes produced on the second attempt. 
+
+
+There were multiple ways the ward numbers were produced on the first try (either correctly or incorrectly):
+\begin{itemize}
+\item Full address (minimum of street number + name): 1,531
+\item Partial address (zip code): 816
+\item Partial address (city name or some other identifier): 1,683
+\item Erroneous input (uninformative number, random text/punctuation): 1,694
+\item Miscellaneous: 53
+\end{itemize}
+
+
+\section{Categorizing Errors}
+After removing entries that successfully generated a ward number, while leaving those that generated a match, but only after the second try, there are 16,506 errors in raw\_user\_address to code.
+
+\iffalse
+\begin{tabular}{ r|c|c| }
+\multicolumn{1}{r}{}
+ &  \multicolumn{1}{c}{}
+ & \multicolumn{1}{c}{} \\
+\cline{2-3}
+ &  &  \\
+\cline{2-3}
+ &  &  \\
+\cline{2-3}
+\end{tabular}
+\fi
+
+\end{document}
