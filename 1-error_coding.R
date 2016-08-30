@@ -83,7 +83,7 @@ errors <- filter(dat_1, ward == "" | ward != "" &
 box_strings <- c("^p o box [0-9]+$", "^p\\.o box [0-9]+$", 
                  "^p\\.o\\.box [0-9]+$", "^po box [0-9]+$", 
                  "^po\\. box [0-9]+$", "^po\\.box [0-9]+$","^pobox[0-9]+$", 
-                 "^Po box")
+                 "^box [0-9]+$")
 incomplete_1 <- function(x){
  grepl(paste(box_strings, collapse = "|"), x, ignore.case = TRUE)
 }
@@ -122,37 +122,79 @@ errors$stnum_only <- incomplete_4(errors$raw_user_address)
 summary(errors$stnum_only)
 select(sample_n(filter(errors, stnum_only == TRUE), 50), raw_user_address)
 
+#Incomplete: a zip code + other information was entered (wrong format)
+incomplete_5 <- function(x){
+  grepl("^[[:alpha:]]{1,20} [0-9]{4}$", x) &
+    !grepl("^box [0-9]{4}$", x, ignore.case = TRUE)
+}
+errors$zipcode_plus <- incomplete_5(errors$raw_user_address)
+
+summary(errors$zipcode_plus)
+select(filter(errors, zipcode_plus == TRUE), raw_user_address)
+
+#Incomplete: right format, not enough information
+#An entry must have a minimum of three words after the street number: 
+#street name = 2 words (i.e. main street, mandela road) + a city name
+#Thus, any correctly formatted entry with less than three words is coded 
+#as correct but incomplete
+
+incomplete_6 <- function(x){
+  grepl("^[0-9]{1,5}[[:space:]]?[[:alpha:]]{1,20}[[:space:]]?[[:alpha:]]{1,20}$", x)
+}
+errors$correct_incomplete <- incomplete_6(errors$raw_user_address)
+
+summary(errors$correct_incomplete)
+select(filter(errors, correct_incomplete == TRUE), raw_user_address)
+
+
 
 #Combining incomplete responses into single indicator
 errors$incomplete <- FALSE
 errors$incomplete[errors$pob_only == TRUE |errors$ward_only == TRUE |
-                    errors$zipcode_only == TRUE | 
-                    errors$stnum_only == TRUE] <- TRUE
+                    errors$zipcode_only == TRUE | errors$stnum_only == TRUE | 
+                    errors$zipcode_plus ==TRUE | 
+                    errors$correct_incomplete ==TRUE] <- TRUE
 summary(errors$incomplete)
 
 
 #Incorrect: a phone number was entered (10 digits)-----------------------------
-incomplete_10 <- function(x){
+incorrect_10 <- function(x){
   grepl("^[0-9]{10}$", x)
 }
-errors$phone_address <- incomplete_10(errors$raw_user_address)
+errors$phone_address <- incorrect_10(errors$raw_user_address)
 
 summary(errors$phone_address)
 select(sample_n(filter(errors, phone_address == TRUE), 50), raw_user_address)
 
-#Incorrect: a random number was entered (not a street number or phone number---
+#Incorrect: a random number was entered (not a street number or phone number)---
 addnum_strings <- c("^[0-9]{5,15}$")
 #exclude phone numbers
 excludenum_strings <- c("^[0-9]{10}$")
 
-incomplete_11 <- function(x){
+incorrect_11 <- function(x){
   grepl(paste(addnum_strings, collapse = "|"), x) & 
   !grepl(paste(excludenum_strings, collapse = "|"), x)
 }
-errors$random_num <- incomplete_11(errors$raw_user_address)
+errors$random_num <- incorrect_11(errors$raw_user_address)
 
 summary(errors$random_num)
 select(sample_n(filter(errors, random_num == TRUE), 50), raw_user_address)
+
+
+
+
+
+#Incorrect: correct format + enough words to be complete 
+#(can be interpreted as a misspelling )
+incorrect_12 <- function(x){
+  grepl("^[0-9]{1,5}[[:space:]]?[[:alpha:]]+", x) &
+  !grepl("^[0-9]{1,5}[[:space:]]?[[:alpha:]]{1,20}[[:space:]]?[[:alpha:]]{1,20}$", x)
+}
+errors$misspell <- incorrect_12(errors$raw_user_address)
+
+summary(errors$misspell)
+select(filter(errors, misspell == TRUE), raw_user_address)
+
 
 #Combining incorrect responses into single indicator
 errors$incorrect <- FALSE
