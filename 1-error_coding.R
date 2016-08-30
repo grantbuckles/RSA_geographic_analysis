@@ -82,9 +82,10 @@ errors <- filter(dat_1, ward == "" | ward != "" &
 #Incomplete: only a P.O. Box was entered---------------------------------------
 box_strings <- c("^p o box [0-9]+$", "^p\\.o box [0-9]+$", 
                  "^p\\.o\\.box [0-9]+$", "^po box [0-9]+$", 
-                 "^po\\. box [0-9]+$", "^po\\.box [0-9]+$","^pobox[0-9]+$" )
+                 "^po\\. box [0-9]+$", "^po\\.box [0-9]+$","^pobox[0-9]+$", 
+                 "^Po box")
 incomplete_1 <- function(x){
- grepl(paste(box_strings, collapse = "|"), x)
+ grepl(paste(box_strings, collapse = "|"), x, ignore.case = TRUE)
 }
 errors$pob_only <- incomplete_1(errors$raw_user_address)
 
@@ -92,10 +93,11 @@ summary(errors$pob_only)
 select(filter(errors, pob_only == TRUE), raw_user_address)
 
 #Incomplete: only a ward number was entered------------------------------------
-ward_strings <- c("^(ward [0-9]+)$", "^(ward[0-9]+)$")
+ward_strings <- c("^(ward [0-9]+)$", "^(ward[0-9]+)$",
+                  "\\bward\\b")
 
 incomplete_2 <- function(x){
-  grepl(paste(ward_strings, collapse = "|"), x)
+  grepl(paste(ward_strings, collapse = "|"), x, ignore.case = TRUE )
 }
 errors$ward_only <- incomplete_2(errors$raw_user_address)
 
@@ -112,8 +114,6 @@ summary(errors$zipcode_only)
 select(sample_n(filter(errors, zipcode_only == TRUE), 50), raw_user_address)
 
 #Incomplete: only a street number was entered----------------------------------
-addnum_strings <- c("^[0-9]{1,3}$")
-
 incomplete_4 <- function(x){
   grepl("^[0-9]{1,3}$", x)
 }
@@ -124,7 +124,7 @@ select(sample_n(filter(errors, stnum_only == TRUE), 50), raw_user_address)
 
 
 #Combining incomplete responses into single indicator
-errors$incomplete <- NULL
+errors$incomplete <- FALSE
 errors$incomplete[errors$pob_only == TRUE |errors$ward_only == TRUE |
                     errors$zipcode_only == TRUE | 
                     errors$stnum_only == TRUE] <- TRUE
@@ -155,6 +155,72 @@ summary(errors$random_num)
 select(sample_n(filter(errors, random_num == TRUE), 50), raw_user_address)
 
 #Combining incorrect responses into single indicator
-errors$incorrect <- NULL
+errors$incorrect <- FALSE
 errors$incorrect[errors$phone_address == TRUE |errors$random_num == TRUE] <- TRUE
 summary(errors$incorrect)
+
+#Other: entered a party name
+party_strings <- c("\\bANC\\b",
+                   "\\beff\\b", 
+                   "\\bda\\b",
+                   "\\bIFP\\b")
+
+other_11 <- function(x){
+  grepl(paste(party_strings, collapse = "|"), x, ignore.case = TRUE) 
+}
+errors$party_name <- other_11(errors$raw_user_address)
+
+summary(errors$party_name)
+select(filter(errors, party_name == TRUE), raw_user_address)
+
+#Other: explitives
+expl_strings <- c("\\bfuck\\b",
+                   "\\bfcuk\\b", 
+                   "\\bshit\\b",
+                   "\\bhell\\b",
+                   "\\bbitch\\b")
+
+other_12 <- function(x){
+  grepl(paste(expl_strings, collapse = "|"), x, ignore.case = TRUE) 
+}
+errors$expletive <- other_12(errors$raw_user_address)
+
+summary(errors$expletive)
+select(filter(errors, expletive == TRUE), raw_user_address)
+
+
+#Other: single punctuation or letter
+single_strings <- c("^[[:punct:]]{1,3}$", "^[[:alpha:]]{1}$")
+
+other_13 <- function(x){
+  grepl(paste(single_strings, collapse = "|"), x)
+}
+errors$singles <- other_13(errors$raw_user_address)
+
+summary(errors$singles)
+select(filter(errors, singles == TRUE), raw_user_address)
+
+#Other: yes, no responses
+response_strings <- c("\\byes\\b", "^no$",
+                    "\\bja\\b", "\\bmaybe\\b",
+                    "\\bok\\b", "\\okay\\b")
+
+other_14 <- function(x){
+  grepl(paste(response_strings, collapse = "|"), x, ignore.case = TRUE)
+}
+errors$yesno <- other_14(errors$raw_user_address)
+
+summary(errors$yesno)
+select(filter(errors, yesno == TRUE), raw_user_address)
+
+
+
+#Combining incorrect responses into single indicator
+errors$other <- FALSE
+errors$other[errors$party_name == TRUE | errors$expletive == TRUE | 
+               errors$singles == TRUE | errors$yesno == TRUE
+             ] <- TRUE
+summary(errors$other)
+
+
+check <- select(filter(errors, incorrect == FALSE, incomplete == FALSE, other == FALSE), raw_user_address)
