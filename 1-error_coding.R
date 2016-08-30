@@ -181,9 +181,6 @@ summary(errors$random_num)
 select(sample_n(filter(errors, random_num == TRUE), 50), raw_user_address)
 
 
-
-
-
 #Incorrect: correct format + enough words to be complete 
 #(can be interpreted as a misspelling )
 incorrect_12 <- function(x){
@@ -198,7 +195,8 @@ select(filter(errors, misspell == TRUE), raw_user_address)
 
 #Combining incorrect responses into single indicator
 errors$incorrect <- FALSE
-errors$incorrect[errors$phone_address == TRUE |errors$random_num == TRUE] <- TRUE
+errors$incorrect[errors$phone_address == TRUE | errors$random_num == TRUE |
+                 errors$misspell == TRUE] <- TRUE
 summary(errors$incorrect)
 
 #Other: entered a party name
@@ -245,7 +243,7 @@ select(filter(errors, singles == TRUE), raw_user_address)
 #Other: yes, no responses
 response_strings <- c("\\byes\\b", "^no$",
                     "\\bja\\b", "\\bmaybe\\b",
-                    "\\bok\\b", "\\okay\\b")
+                    "\\bok\\b", "\\bokay\\b")
 
 other_14 <- function(x){
   grepl(paste(response_strings, collapse = "|"), x, ignore.case = TRUE)
@@ -265,4 +263,4 @@ errors$other[errors$party_name == TRUE | errors$expletive == TRUE |
 summary(errors$other)
 
 
-check <- select(filter(errors, incorrect == FALSE, incomplete == FALSE, other == FALSE), raw_user_address)
+remaining <- select(filter(errors, incorrect == FALSE, incomplete == FALSE, other == FALSE), raw_user_address)
