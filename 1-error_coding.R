@@ -73,17 +73,18 @@ summary(successes$misc)
 
 #Code errors
 
-#Remove successes from the data------------------------------------------------------
+#Remove successes from the data------------------------------------------------
 dat_1 <- select(filter(dat, raw_user_address != ""),
                     raw_user_address, raw_user_address_2, ward)
 errors <- filter(dat_1, ward == "" | ward != "" & 
                    raw_user_address_2 != "")
 
-#Incomplete: only a P.O. Box was entered---------------------------------------
-box_strings <- c("^p o box [0-9]+$", "^p\\.o box [0-9]+$", 
-                 "^p\\.o\\.box [0-9]+$", "^po box [0-9]+$", 
-                 "^po\\. box [0-9]+$", "^po\\.box [0-9]+$","^pobox[0-9]+$", 
-                 "^box [0-9]+$")
+#Incomplete: a P.O. Box was entered first--------------------------------------
+box_strings <- c("^p o box [0-9]+", "^p\\.o box [0-9]+", 
+                 "^p\\.o\\.box [0-9]+", "^po box [0-9]+", 
+                 "^po\\. box [0-9]+", "^po\\.box [0-9]+","^pobox[0-9]+", 
+                 "^box [0-9]+", "^po bx[0-9]+", "^p\\.box[0-9]+",
+                 "^P\\.O\\. BOX+",  "^P\\.0\\. +")
 incomplete_1 <- function(x){
  grepl(paste(box_strings, collapse = "|"), x, ignore.case = TRUE)
 }
@@ -240,10 +241,11 @@ errors$singles <- other_13(errors$raw_user_address)
 summary(errors$singles)
 select(filter(errors, singles == TRUE), raw_user_address)
 
-#Other: yes, no responses
+#Other: yes, no, hi responses
 response_strings <- c("\\byes\\b", "^no$",
                     "\\bja\\b", "\\bmaybe\\b",
-                    "\\bok\\b", "\\bokay\\b")
+                    "\\bok\\b", "\\bokay\\b",
+                    "\\bhi\\b", "\\bhello\\b")
 
 other_14 <- function(x){
   grepl(paste(response_strings, collapse = "|"), x, ignore.case = TRUE)
