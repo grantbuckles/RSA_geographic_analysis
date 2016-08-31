@@ -1,7 +1,7 @@
 ##################
 # Geographic Randomization - Coding
 # Created by Grant Buckles
-# Last Updated August 26, 2016
+# Last Updated August 31, 2016
 ##################
 
 library(stringr)
