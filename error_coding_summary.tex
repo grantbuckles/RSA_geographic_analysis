@@ -25,7 +25,37 @@ There were multiple ways the ward numbers were produced on the first try (either
 
 
 \section{Categorizing Errors}
-After removing entries that successfully generated a ward number, while leaving those that generated a match, but only after the second try, there are 16,506 errors in raw\_user\_address to code.
+After removing entries that successfully generated a ward number, while leaving those that generated a match, but only after the second try, there are 16,506 errors in raw\_user\_address to code. I currently use three broad categorizing errors: 1) incomplete entries, 2) incorrect entries, and 3) extraneous entires. 
+
+\paragraph{Incomplete entries} These are entries where individuals appear to have made an effort to submit location information, but did not submit enough information to produce a successful match. Within this category, I create multiple subcategories of incomplete entries: 
+\begin{itemize}
+\item Ward only: only a ward number was entered (i.e. ``Ward 3'')
+\item Zip code only: only a zip code was entered (a four digit number)
+\item Street number only: only a street number was entered (< than a four digit number)
+\item Zip code + other location info: a zip code was entered with other location information (i.e. a city or village name)
+\item Street name + incomplete location: An entry must have a minimum of three words after the street number (street names must have two words [i.e. main street, mandela road] and a city name. Thus, any correctly formatted entry with a street number but less than three words is included in this category) 
+\end{itemize}
+This category currently accounts for 6,885 of 16,506 errors (42\%). 
+
+\paragraph{Incorrect entries} These are entries where individuals appear to have made an effort to submit some type of information, but may have submitted erroneous information or committed a user error. Within this category, I create multiple subcategories of incorrect entries: 
+\begin{itemize}
+\item Phone number: the user entered a phone number (a ten digit number)
+\item Random number: the user entered a number that could not be considered a phone number, zip code, or street number.
+\item Unrecognized address: the user submitted an address in the correct format with a street number and enough words to form a full address. However, the address was not recognized. This can be attributed to misspellings, unconventional abbreviations, and unofficial or fake addresses.
+\item P.O Box: only a P.O. Box was entered or a P.O. Box was entered instead of a street number. 
+\end{itemize}
+This category currently accounts for  4,319 of 16,506 errors (26\%). 
+
+\paragraph{Extraneous entries} These are entries where individuals make no effort enter useful information. Within this category, I create multiple subcategories of incorrect entries: 
+\begin{itemize}
+\item Party name: the user entered a party name or statement of support for a party (includes the ANC, EFF, and DA)
+\item Expletives: the user entered an expletive. 
+\item Single character: the user entered only a single letter or punctuation character. 
+\item Personal responses: the user entered a brief, random reply (yes, no, okay, maybe, hi, hello) 
+\item Other responses: the user entered a brief reply that could be interpreted as a response to other questions on the survey (yes, no, okay, maybe, hi, hello) 
+
+\end{itemize}
+This category currently accounts for  1,335 of 16,506 errors (8\%). 
 
 \iffalse
 \begin{tabular}{ r|c|c| }
