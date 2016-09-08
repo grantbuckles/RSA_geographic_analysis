@@ -31,7 +31,7 @@ summary(successes$initial_entry)
 
 ##reason for success: full address 
 true_1 <- function(x){
-  grepl("^[0-9]{1, 5}[[:space:]]?[[:alpha:]]+", x)
+  grepl("^[0-9]{1,5}[[:space:]]?[[:alpha:]]+", x)
 }
 successes$true_full <- true_1(successes$raw_user_address)
 summary(successes$true_full)
@@ -39,16 +39,16 @@ summary(successes$true_full)
 ##reason for success: zip code 
 true_2 <- function(x){
   grepl("[0-9]{4}", x) &
-    !grepl("^[0-9]{1, 5}[[:space:]]?[[:alpha:]]+", x) 
+    !grepl("^[0-9]{1,5}[[:space:]]?[[:alpha:]]+", x) 
   }
 successes$true_zip <- true_2(successes$raw_user_address)
 summary(successes$true_zip)
 
 #reason for success: city name/other area identifier only
 exclude_strings <- c("^[0-9]{4}$", "[0-9]{4}$", "[0-9]{4}",
-                      "^[0-9]{1, 5}[[:space:]]?[[:alpha:]]+")
+                      "^[0-9]{1,5}[[:space:]]?[[:alpha:]]+")
 true_3 <- function(x){
-  grepl("[[:alpha:]]{3, 30}", x) &
+  grepl("[[:alpha:]]{3,30}", x) &
     !grepl(paste(exclude_strings, collapse = "|"), x)
 }
 successes$true_city <- true_3(successes$raw_user_address)
@@ -58,7 +58,7 @@ summary(successes$true_city)
 #entries of numbers that are uninformative (i.e. not zip codes or ward numbers)
 #and two character words.
 
-false_strings <- c("^[0-9]{1, 3}$", "^[[:punct:]]$", "^[[:alpha:]]{1,2}$")
+false_strings <- c("^[0-9]{1,3}$", "^[[:punct:]]$", "^[[:alpha:]]{1,2}$")
 false_1 <- function(x){
   grepl(paste(false_strings, collapse = "|"), x)
 }
@@ -162,7 +162,7 @@ summary(errors$phone_address)
 #select(sample_n(filter(errors, phone_address == TRUE), 50), raw_user_address)
 
 #Incorrect: a random number was entered (not a street number or phone number)---
-addnum_strings <- c("^[0-9]{5, 15}$")
+addnum_strings <- c("^[0-9]{5,15}$")
 #exclude phone numbers
 excludenum_strings <- c("^[0-9]{10}$")
 
@@ -211,7 +211,7 @@ incorrect_14 <- function(x){
 errors$ward_first <- incorrect_14(errors$raw_user_address)
 
 summary(errors$ward_first)
-select(filter(errors, ward_first == TRUE), raw_user_address)
+#select(filter(errors, ward_first == TRUE), raw_user_address)
 
 
 #Combining incorrect responses into single indicator
@@ -231,7 +231,7 @@ party_strings <- c("\\bANC\\b", "\\beff\\b", "\\bda\\b", "\\bIFP\\b")
 extraneous_10 <- function(x){
   grepl(paste(party_strings, collapse = "|"), x, ignore.case = TRUE) 
 }
-errors$party_name <- other_11(errors$raw_user_address)
+errors$party_name <- extraneous_10(errors$raw_user_address)
 
 summary(errors$party_name)
 #select(filter(errors, party_name == TRUE), raw_user_address)
