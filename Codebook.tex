@@ -15,6 +15,30 @@
 
 \maketitle
 
+\paragraph{Incomplete information}
+\begin{itemize}
+\item 1 --- Ward only: only a ward number was entered (i.e. ``Ward 3'')
+\item 2 --- Zip code only: only a zip code was entered (a four digit number)
+\item 3 --- Street number only: only a street number was entered ($<$ than a four digit number)
+\item 4 --- Zip code + other location info: a zip code was entered with other location information (i.e. a city or street name)
+\item 5 --- Street number + other location info: a street number was entered with other location information (i.e. a city or street name), but is incomplete (e.g. 24 main street, 52 Pretoria)
+\end{itemize}
+\paragraph{Incorrect information}
+\begin{itemize}
+\item 11 --- Phone number: the user entered a phone number (a ten digit number)
+\item 12 ---Random number: the user entered a number that could not be considered a phone number, zip code, or street number.
+\item 13 --- Unrecognized address: the user submitted an address in the correct format with a street number and enough words to form a full address. However, the address was not recognized. This includes misspellings, unconventional abbreviations, and unofficial or fake addresses.
+\item 14 --- P.O Box: only a P.O. Box was entered or a P.O. Box was entered instead of a street number. 
+\item 15 --- Ward first: a ward number was entered first or ward was misspelled.
+\end{itemize}
+\paragraph{Extraneous information}
+\begin{itemize}
+\item 21 --- Party name: the user entered a party name or statement of support for a party
+\item 22 --- Expletives: the user entered an expletive. 
+\item 23 --- Single character: the user entered only a single letter or punctuation character. 
+\item 24 --- Personal responses: the user entered a brief, random reply (hi, hello, thanks, a question, or a statement beginning in ``I'') 
+\item 25 --- Other responses: the user entered a brief reply that could be interpreted as a response to other questions on the survey (yes, no, okay, back, exit, 1. Accept \& Join, $\ast$100\#) 
+\end{itemize}
 
 
 \end{document}

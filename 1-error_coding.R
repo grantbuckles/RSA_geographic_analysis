@@ -5,6 +5,7 @@
 ##################
 
 library(stringr)
+library(xlsx)
 
 #remove test address
 dat <- filter(dat, raw_user_address != "12 main street pretoria")
@@ -297,3 +298,29 @@ summary(errors$extraneous)
 
 #------------------------------------------------------------------
 remaining <- select(filter(errors, incorrect == FALSE, incomplete == FALSE, extraneous == FALSE), raw_user_address)
+
+
+#------------------------------------------------------------------
+
+#Assigning code numbers to each category
+errors$error_cat <- NULL
+errors$error_cat[errors$ward_only == TRUE] <- 1
+errors$error_cat[errors$zipcode_only == TRUE] <- 2
+errors$error_cat[errors$stnum_only == TRUE] <- 3
+errors$error_cat[errors$zipcode_plus == TRUE] <- 4
+errors$error_cat[errors$strnum_plus == TRUE] <- 5
+
+errors$error_cat[errors$phone_address == TRUE] <- 11
+errors$error_cat[errors$random_num == TRUE] <- 12
+errors$error_cat[errors$unrecog == TRUE] <- 13
+errors$error_cat[errors$pob_only == TRUE] <- 14
+errors$error_cat[errors$ward_first == TRUE] <- 15
+
+errors$error_cat[errors$party_name == TRUE] <- 21
+errors$error_cat[errors$expletive == TRUE] <- 22
+errors$error_cat[errors$singles == TRUE] <- 23
+errors$error_cat[errors$yesno == TRUE] <- 24
+errors$error_cat[errors$other == TRUE] <- 25
+
+hand_coding <- sample_n(select(errors, raw_user_address, error_cat), 500)
+#write.table(hand_coding, file = "hand-coding.csv", sep = ",", row.names = FALSE, qmethod = "double")
