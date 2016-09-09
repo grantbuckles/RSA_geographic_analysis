@@ -1,11 +1,10 @@
 ##################
 # Geographic Randomization - Coding
 # Created by Grant Buckles
-# Last Updated August 31, 2016
+# Last Updated September 9, 2016
 ##################
 
 library(stringr)
-library(xlsx)
 
 #remove test address
 dat <- filter(dat, raw_user_address != "12 main street pretoria")
