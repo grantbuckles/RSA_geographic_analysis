@@ -1,7 +1,7 @@
 ##################
 # Geographic Randomization - Coding
 # Created by Grant Buckles
-# Last Updated September 9, 2016
+# Last Updated September 10, 2016
 ##################
 
 library(stringr)
@@ -79,7 +79,7 @@ summary(successes$misc)
 
 #Remove successes from the data------------------------------------------------
 dat_1 <- select(filter(dat, raw_user_address != ""),
-                    raw_user_address, raw_user_address_2, ward)
+                    key, raw_user_address, raw_user_address_2, ward)
 errors <- filter(dat_1, ward == "" | ward != "" & 
                    raw_user_address_2 != "")
 
@@ -276,7 +276,7 @@ summary(errors$yesno)
 other_strings <- c("^[0-9]\\.", "^\\*", "^back$", "^exit$",
                    "\\byes\\b", "\\byebo\\b", "^no$", "^nee$",
                    "\\bja\\b", "\\bmaybe\\b",
-                   "\\bok\\b", "\\bokay\\b", "\\bvip\\b",
+                   "\\bok\\b", "\\bokay\\b",
                    "\\boky\\b", "\\bokey\\b")
 
 extraneous_14 <- function(x){
@@ -321,5 +321,9 @@ errors$error_cat[errors$singles == TRUE] <- 23
 errors$error_cat[errors$yesno == TRUE] <- 24
 errors$error_cat[errors$other == TRUE] <- 25
 
-hand_coding <- sample_n(select(errors, raw_user_address, error_cat), 500)
+hand_coding <- sample_n(select(errors, key, raw_user_address, error_cat), 500)
+
+#Export .csv file for hand coding
+hand_coding$correct_match <- ""
+hand_coding$nomatch_code <- ""
 #write.table(hand_coding, file = "hand-coding.csv", sep = ",", row.names = FALSE, qmethod = "double")
