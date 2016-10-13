@@ -6,6 +6,7 @@
 
 library(stringr)
 library(xtable)
+library(multcomp)
 require(descr)
 #Extract sample from randomization
 dat1 <- filter(dat, address_treat != "")
@@ -140,4 +141,52 @@ print(xtable(engaged))
 # Analysis
 #------------------------------------------------------------------------------
 
+## 1. Test of Proportions------------------------------------------------------
 
+### Example: Engagement Question 
+prop.test(table(dat1$engagement_question, dat1$address_treat)[,c(1,2)], 
+          correct=FALSE)
+prop.test(table(dat1$engagement_question, dat1$address_treat)[,c(2,3)], 
+          correct=FALSE)
+prop.test(table(dat1$engagement_question, dat1$address_treat)[,c(1,3)], 
+          correct=FALSE)
+
+### Example: Feeling Thermometer
+prop.test(table(dat1$feeling_therm_rd1, dat1$address_treat)[,c(1,2)], 
+          correct=FALSE)
+prop.test(table(dat1$feeling_therm_rd1, dat1$address_treat)[,c(2,3)], 
+          correct=FALSE)
+prop.test(table(dat1$feeling_therm_rd1, dat1$address_treat)[,c(1,3)], 
+          correct=FALSE)
+
+### Example: Gender 
+prop.test(table(dat1$answerwin_question_gender, dat1$address_treat)[,c(1,2)], 
+          correct=FALSE)
+prop.test(table(dat1$answerwin_question_gender, dat1$address_treat)[,c(2,3)], 
+          correct=FALSE)
+prop.test(table(dat1$answerwin_question_gender, dat1$address_treat)[,c(1,3)], 
+          correct=FALSE)
+
+## 2. Logistic Regression------------------------------------------------------
+
+### Variables 
+dat1$feeling_therm_rd1[dat1$pre_thermometer_round_1_reply == ""] <- 0
+dat1$feeling_therm_rd1[dat1$pre_thermometer_round_1_reply != ""] <- 1
+dat1$feeling_therm_rd1 <- as.numeric(dat1$feeling_therm_rd1)
+
+dat1$black[dat1$answerwin_question_race == "black_african"] <- 1
+dat1$black[dat1$answerwin_question_race != "black_african"] <- 0
+
+dat1$male[dat1$answerwin_question_gender == "male"] <- 1
+dat1$male[dat1$answerwin_question_gender != "male"] <- 0
+
+dat1$twenties[dat1$answerwin_question_age == "20-29"] <- 1
+dat1$twenties[dat1$answerwin_question_age != "20-29"] <- 0
+
+### Plain Logit - Feeling Thermometer Response
+
+mod1.1 <- glm(feeling_therm_rd1 ~ black + male + twenties,
+              family=binomial(link="probit"), data = dat1)
+summary(mod1.1)
+
+#Note: Adjust P-values for Multiple Comparisons
