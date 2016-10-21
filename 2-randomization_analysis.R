@@ -173,7 +173,7 @@ dat1$other2[dat1$USSD_number != "*120*7692*8#"] <- 0
 dat1$other3[dat1$USSD_number == "*120*7692#"] <- 1
 dat1$other3[dat1$USSD_number != "*120*7692#"] <- 0
 
-### Plain Logit - Feeling Thermometer Response
+### Model
 
 mod1.1 <- lm(engaged ~ nolookup + prime +
                 days +
