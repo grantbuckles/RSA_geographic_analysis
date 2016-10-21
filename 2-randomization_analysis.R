@@ -19,8 +19,6 @@ sink(file = paste0(texFile, "/analysis_dump.txt"), append = FALSE, type = c("out
      split = TRUE)
 invisible(file.copy(from="output_template", to=paste0(texFile,"/output_template", Sys.Date(),".tex")))
 
-cat("Sample Text")
-
 
 #------------------------------------------------------------------------------
 # Prepare data
@@ -43,10 +41,8 @@ dat1 <- filter(dat1, duplicated(dat1$msisdn) == FALSE)
 #### the time/date that a question was asked are excluded.
 
 dat1$total.entries <- rowSums(dat1[c(49:56, 58, 61:63, 65, 67, 69, 71, 73:87, 89:109)] != "")
-table(dat1$total.entries)
-
-#Configure .tex output for table
-#print(xtable(table(dat1$total.entries)))
+table1 <- as.table(table(dat1$total.entries, dnn = c("Engaged - Number of Responses")))
+print(xtable(table1, caption = "Distribution of Engagement"))
 
 ### Create dichotomous variable of engagement
 
@@ -54,8 +50,8 @@ dat1$engaged <- NULL
 dat1$engaged[dat1$total.entries > 0] <- 1
 dat1$engaged[dat1$total.entries == 0] <- 0
 
-#Configure .tex output for table
-#print(xtable(table(dat1$engaged)))
+table2 <- as.table(table(dat1$engaged, dnn = c("Engaged - No/Yes")))
+print(xtable(table2, caption ="Distribution of Engagement"))
 
 #------------------------------------------------------------------------------
 # Descriptive statistics
@@ -68,25 +64,19 @@ dat2 <- filter(dat1, address_treat == "B" | address_treat == "C")
 
 dat2$engage_address[dat2$raw_user_address != ""] <- "Entered Address"
 dat2$engage_address[dat2$raw_user_address == ""] <- "Did Not Enter Address"
-#check variables
-select(dat2, engage_address, raw_user_address, address_treat)[0:50,]
 
 ### Descriptive statistics
 address_entry <- crosstab(dat2$engage_address, dat2$address_treat,
          dnn = c("Opinion", "Education"), prop.c = TRUE, prop.r = FALSE, 
          prop.t = FALSE, prop.chisq = FALSE, chisq = FALSE, plot = FALSE)
-address_entry
-print(xtable(address_entry))
+print(xtable(address_entry, caption = "Descriptive Statistics - Address Entry Following Redo"))
 
 ## 2. Furthur engagement-------------------------------------------
 
 enga <- crosstab(dat1$engaged, dat1$address_treat,
          dnn = c("Engaged", "Treatment Group"), prop.c = TRUE, prop.r = TRUE, 
          prop.t = FALSE, prop.chisq = FALSE, chisq = FALSE, plot = FALSE)
-enga
-
-#.text output
-#print(xtable(enga))
+print(xtable(enga, caption = "Descriptive Statistics - Engagement amongst groups"))
 
 #------------------------------------------------------------------------------
 # Analysis
@@ -97,13 +87,21 @@ enga
 ### Example: Engagement Question 
 test1 <- prop.test(table(dat1$engaged, dat1$address_treat)[,c(1,2)], 
           correct=FALSE)
+p.value1 <- as.table(test1$p.value)
+print(xtable(p.value1, caption = "P-value - Test of Proportion Group A vs. Group B"))
+
 test2 <- prop.test(table(dat1$engaged, dat1$address_treat)[,c(2,3)], 
           correct=FALSE)
+p.value2 <- as.table(test2$p.value)
+print(xtable(p.value2, caption = "P-value - Test of Proportion Group B vs. Group C"))
+
 test3 <- prop.test(table(dat1$engaged, dat1$address_treat)[,c(1,3)], 
           correct=FALSE)
+p.value3 <- as.table(test3$p.value)
+print(xtable(p.value3, caption = "P-value - Test of Proportion Group A vs. Group C"))
 
 #cat("The difference between Group A (no lookup) and the other two groups is 
-# statistically significant.")
+#    statistically significant.")
 
 ## 2. Logistic Regression------------------------------------------------------
 
@@ -161,6 +159,6 @@ mod1.1 <- glm(engaged ~ nolookup + prime +
                 days +
                 lottery + subsidy + control, 
               family=binomial(link="probit"), data = dat1)
-summary(mod1.1)
+xtable(summary(mod1.1), caption = "Logistic regression - Engagement")
 
 #Note: Adjust P-values for Multiple Comparisons
