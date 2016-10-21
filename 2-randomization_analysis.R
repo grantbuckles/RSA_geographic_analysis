@@ -1,7 +1,7 @@
 ##################
 # Geographic Randomization - Statistical Analysis of Randomization
 # Created by Grant Buckles
-# Last Updated October 20, 2016
+# Last Updated October 21, 2016
 ##################
 
 library(stringr)
@@ -19,9 +19,8 @@ sink(file = paste0(texFile, "/analysis_dump.txt"), append = FALSE, type = c("out
      split = TRUE)
 invisible(file.copy(from="output_template", to=paste0(texFile,"/output_template", Sys.Date(),".tex")))
 
-#cat("Text")
-#print(xtable(table1,caption = 'Caption'),  
-#      caption.placement = 'top')
+cat("Sample Text")
+
 
 #------------------------------------------------------------------------------
 # Prepare data
@@ -46,11 +45,17 @@ dat1 <- filter(dat1, duplicated(dat1$msisdn) == FALSE)
 dat1$total.entries <- rowSums(dat1[c(49:56, 58, 61:63, 65, 67, 69, 71, 73:87, 89:109)] != "")
 table(dat1$total.entries)
 
+#Configure .tex output for table
+#print(xtable(table(dat1$total.entries)))
+
 ### Create dichotomous variable of engagement
 
 dat1$engaged <- NULL
 dat1$engaged[dat1$total.entries > 0] <- 1
 dat1$engaged[dat1$total.entries == 0] <- 0
+
+#Configure .tex output for table
+#print(xtable(table(dat1$engaged)))
 
 #------------------------------------------------------------------------------
 # Descriptive statistics
@@ -79,8 +84,9 @@ enga <- crosstab(dat1$engaged, dat1$address_treat,
          dnn = c("Engaged", "Treatment Group"), prop.c = TRUE, prop.r = TRUE, 
          prop.t = FALSE, prop.chisq = FALSE, chisq = FALSE, plot = FALSE)
 enga
-print(xtable(enga))
 
+#.text output
+#print(xtable(enga))
 
 #------------------------------------------------------------------------------
 # Analysis
@@ -89,11 +95,11 @@ print(xtable(enga))
 ## 1. Test of Proportions------------------------------------------------------
 
 ### Example: Engagement Question 
-prop.test(table(dat1$engaged, dat1$address_treat)[,c(1,2)], 
+test1 <- prop.test(table(dat1$engaged, dat1$address_treat)[,c(1,2)], 
           correct=FALSE)
-prop.test(table(dat1$engaged, dat1$address_treat)[,c(2,3)], 
+test2 <- prop.test(table(dat1$engaged, dat1$address_treat)[,c(2,3)], 
           correct=FALSE)
-prop.test(table(dat1$engaged, dat1$address_treat)[,c(1,3)], 
+test3 <- prop.test(table(dat1$engaged, dat1$address_treat)[,c(1,3)], 
           correct=FALSE)
 
 cat("The difference between Group A (no lookup) and the other two groups is statistically 
@@ -102,22 +108,28 @@ cat("The difference between Group A (no lookup) and the other two groups is stat
 ## 2. Logistic Regression------------------------------------------------------
 
 ### Variables 
-dat1$feeling_therm_rd1[dat1$pre_thermometer_round_1_reply == ""] <- 0
-dat1$feeling_therm_rd1[dat1$pre_thermometer_round_1_reply != ""] <- 1
-dat1$feeling_therm_rd1 <- as.numeric(dat1$feeling_therm_rd1)
 
-dat1$black[dat1$answerwin_question_race == "black_african"] <- 1
-dat1$black[dat1$answerwin_question_race != "black_african"] <- 0
+#### Number of days in system (April 17 - date created)
+dat1$days[as.Date(dat1$created_at) == "2014-04-07"] <- 10
+dat1$days[as.Date(dat1$created_at) == "2014-04-08"] <- 9
+dat1$days[as.Date(dat1$created_at) == "2014-04-09"] <- 8
+dat1$days[as.Date(dat1$created_at) == "2014-04-10"] <- 7
+dat1$days[as.Date(dat1$created_at) == "2014-04-11"] <- 6
+dat1$days[as.Date(dat1$created_at) == "2014-04-12"] <- 5
+dat1$days[as.Date(dat1$created_at) == "2014-04-13"] <- 4
+dat1$days[as.Date(dat1$created_at) == "2014-04-14"] <- 3
 
-dat1$male[dat1$answerwin_question_gender == "male"] <- 1
-dat1$male[dat1$answerwin_question_gender != "male"] <- 0
+#### Channel category - Treatment 2 (Subsidy)
+dat1$control[dat1$USSD_number == "*120*4729#"] <- 1
+dat1$control[dat1$USSD_number != "*120*4729#"] <- 0
 
-dat1$twenties[dat1$answerwin_question_age == "20-29"] <- 1
-dat1$twenties[dat1$answerwin_question_age != "20-29"] <- 0
+#### Channel category - Treatment 1 (Lottery)
+dat1$control[dat1$USSD_number == "*120*4729#"] <- 1
+dat1$control[dat1$USSD_number != "*120*4729#"] <- 0
 
 ### Plain Logit - Feeling Thermometer Response
 
-mod1.1 <- glm(feeling_therm_rd1 ~ black + male + twenties,
+mod1.1 <- glm(engaged ~ days +,
               family=binomial(link="probit"), data = dat1)
 summary(mod1.1)
 
