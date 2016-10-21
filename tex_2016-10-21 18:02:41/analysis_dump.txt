@@ -1,0 +1,289 @@
+\pagebreak\section{Any Form of Engagment with the System}\subsection{Descriptive Statistics}% latex table generated in R 3.3.1 by xtable 1.8-2 package
+% Fri Oct 21 18:02:41 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rr}
+  \hline
+ & Engaged - 
+                                                     Number of Responses \\ 
+  \hline
+0 & 5392 \\ 
+  1 & 1617 \\ 
+  2 & 676 \\ 
+  3 & 347 \\ 
+  4 & 551 \\ 
+  5 & 296 \\ 
+  6 & 209 \\ 
+  7 & 155 \\ 
+  8 & 174 \\ 
+  9 & 130 \\ 
+  10 & 105 \\ 
+  11 &  67 \\ 
+  12 &  82 \\ 
+  13 &  46 \\ 
+  14 &  38 \\ 
+  15 &  28 \\ 
+  16 &  27 \\ 
+  17 &  17 \\ 
+  18 &  10 \\ 
+  19 &   7 \\ 
+  20 &   3 \\ 
+  21 &   3 \\ 
+  22 &   3 \\ 
+  24 &   2 \\ 
+  26 &   1 \\ 
+  27 &   4 \\ 
+  28 &   3 \\ 
+  29 &   3 \\ 
+  32 &   1 \\ 
+  33 &   1 \\ 
+  37 &   1 \\ 
+   \hline
+\end{tabular}
+\caption{Distribution of Engagement} 
+\end{table}
+
+
+% latex table generated in R 3.3.1 by xtable 1.8-2 package
+% Fri Oct 21 18:02:41 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rr}
+  \hline
+ & Engaged - No/Yes \\ 
+  \hline
+0 & 5392 \\ 
+  1 & 4607 \\ 
+   \hline
+\end{tabular}
+\caption{Distribution of Engagement} 
+\end{table}
+
+
+\pagebreak
+% latex table generated in R 3.3.1 by xtable 1.8-2 package
+% Fri Oct 21 18:02:41 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{llrrr}
+  \hline
+ & Opinion & B & C & Total \\ 
+  \hline
+1 & Did Not Enter Address & 3152 & 3149 & 6301 \\ 
+  2 &   & 94.5\% & 94.5\% &  \\ 
+  3 & Entered Address & 182 & 184 & 366 \\ 
+  4 &   & 5.5\% & 5.5\% &  \\ 
+  5 & Total & 3334 & 3333 & 6667 \\ 
+  6 &  & 50\% & 50\% &  \\ 
+   \hline
+\end{tabular}
+\caption{Address Entry Following Redo (Group B 
+             vs. Group C)} 
+\end{table}
+
+
+% latex table generated in R 3.3.1 by xtable 1.8-2 package
+% Fri Oct 21 18:02:41 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{llrrrr}
+  \hline
+ & Engaged & A & B & C & Total \\ 
+  \hline
+1 & 0 & 1689 & 1854 & 1849 & 5392 \\ 
+  2 &   & 31.3\% & 34.4\% & 34.3\% & 53.9\% \\ 
+  3 &   & 50.7\% & 55.6\% & 55.5\% &  \\ 
+  4 & 1 & 1643 & 1480 & 1484 & 4607 \\ 
+  5 &   & 35.7\% & 32.1\% & 32.2\% & 46.1\% \\ 
+  6 &   & 49.3\% & 44.4\% & 44.5\% &  \\ 
+  7 & Total & 3332 & 3334 & 3333 & 9999 \\ 
+  8 &  & 33.3\% & 33.3\% & 33.3\% &  \\ 
+   \hline
+\end{tabular}
+\caption{Engagement among control and treatment groups} 
+\end{table}
+
+
+\pagebreak\subsection{Analysis}% latex table generated in R 3.3.1 by xtable 1.8-2 package
+% Fri Oct 21 18:02:41 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rr}
+  \hline
+ & x \\ 
+  \hline
+A & 0.00 \\ 
+   \hline
+\end{tabular}
+\caption{P-value - Test of Proportion: Group A vs. 
+             Group B} 
+\end{table}
+% latex table generated in R 3.3.1 by xtable 1.8-2 package
+% Fri Oct 21 18:02:41 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rr}
+  \hline
+ & x \\ 
+  \hline
+A & 0.91 \\ 
+   \hline
+\end{tabular}
+\caption{P-value - Test of Proportions: Group B vs. 
+             Group C} 
+\end{table}
+% latex table generated in R 3.3.1 by xtable 1.8-2 package
+% Fri Oct 21 18:02:41 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rr}
+  \hline
+ & x \\ 
+  \hline
+A & 0.00 \\ 
+   \hline
+\end{tabular}
+\caption{P-value - Test of Proportions: Group A vs. 
+             Group C} 
+\end{table}
+The difference between Group A (no lookup) and the other two groups is 
+    statistically significant.% latex table generated in R 3.3.1 by xtable 1.8-2 package
+% Fri Oct 21 18:02:42 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & Estimate & Std. Error & t value & Pr($>$$|$t$|$) \\ 
+  \hline
+(Intercept) & 0.4104 & 0.0362 & 11.35 & 0.0000 \\ 
+  nolookup & 0.0497 & 0.0122 & 4.08 & 0.0000 \\ 
+  prime & 0.0016 & 0.0122 & 0.13 & 0.8931 \\ 
+  days & 0.0029 & 0.0044 & 0.65 & 0.5180 \\ 
+  lottery & 0.0304 & 0.0180 & 1.69 & 0.0911 \\ 
+  subsidy & -0.0385 & 0.0200 & -1.92 & 0.0547 \\ 
+  control & 0.0205 & 0.0217 & 0.95 & 0.3444 \\ 
+   \hline
+\end{tabular}
+\caption{Linear Probability Model of Engagement} 
+\end{table}
+\pagebreak\pagebreak\section{Engagement with Answer \& Win Questions}\subsection{Descriptive Statistics}% latex table generated in R 3.3.1 by xtable 1.8-2 package
+% Fri Oct 21 18:02:42 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rr}
+  \hline
+ & Engaged - 
+                                                  Number of Responses \\ 
+  \hline
+0 & 8782 \\ 
+  1 &  78 \\ 
+  2 &  97 \\ 
+  3 &  52 \\ 
+  4 & 990 \\ 
+   \hline
+\end{tabular}
+\caption{Distribution of Engagement} 
+\end{table}
+
+
+% latex table generated in R 3.3.1 by xtable 1.8-2 package
+% Fri Oct 21 18:02:42 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rr}
+  \hline
+ & Engaged - No/Yes \\ 
+  \hline
+0 & 8782 \\ 
+  1 & 1217 \\ 
+   \hline
+\end{tabular}
+\caption{Distribution of Engagement} 
+\end{table}
+
+
+\pagebreak
+% latex table generated in R 3.3.1 by xtable 1.8-2 package
+% Fri Oct 21 18:02:42 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{llrrrr}
+  \hline
+ & Engaged & A & B & C & Total \\ 
+  \hline
+1 & 0 & 2681 & 3057 & 3044 & 8782 \\ 
+  2 &   & 30.5\% & 34.8\% & 34.7\% & 87.8\% \\ 
+  3 &   & 80.5\% & 91.7\% & 91.3\% &  \\ 
+  4 & 1 & 651 & 277 & 289 & 1217 \\ 
+  5 &   & 53.5\% & 22.8\% & 23.7\% & 12.2\% \\ 
+  6 &   & 19.5\% & 8.3\% & 8.7\% &  \\ 
+  7 & Total & 3332 & 3334 & 3333 & 9999 \\ 
+  8 &  & 33.3\% & 33.3\% & 33.3\% &  \\ 
+   \hline
+\end{tabular}
+\caption{Engagement among control and treatment groups} 
+\end{table}
+
+
+\pagebreak\subsection{Analysis}% latex table generated in R 3.3.1 by xtable 1.8-2 package
+% Fri Oct 21 18:02:42 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rr}
+  \hline
+ & x \\ 
+  \hline
+A & 0.00 \\ 
+   \hline
+\end{tabular}
+\caption{P-value - Test of Proportion: Group A vs. 
+             Group B} 
+\end{table}
+% latex table generated in R 3.3.1 by xtable 1.8-2 package
+% Fri Oct 21 18:02:42 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rr}
+  \hline
+ & x \\ 
+  \hline
+A & 0.60 \\ 
+   \hline
+\end{tabular}
+\caption{P-value - Test of Proportions: Group B vs. 
+             Group C} 
+\end{table}
+% latex table generated in R 3.3.1 by xtable 1.8-2 package
+% Fri Oct 21 18:02:42 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rr}
+  \hline
+ & x \\ 
+  \hline
+A & 0.00 \\ 
+   \hline
+\end{tabular}
+\caption{P-value - Test of Proportions: Group A vs. 
+             Group C} 
+\end{table}
+The difference between Group A (no lookup) and the other two groups is 
+    statistically significant.% latex table generated in R 3.3.1 by xtable 1.8-2 package
+% Fri Oct 21 18:02:42 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & Estimate & Std. Error & t value & Pr($>$$|$t$|$) \\ 
+  \hline
+(Intercept) & 0.0502 & 0.0234 & 2.14 & 0.0320 \\ 
+  nolookup & 0.1126 & 0.0079 & 14.26 & 0.0000 \\ 
+  prime & 0.0036 & 0.0079 & 0.46 & 0.6467 \\ 
+  days & -0.0001 & 0.0029 & -0.02 & 0.9840 \\ 
+  lottery & 0.0446 & 0.0117 & 3.82 & 0.0001 \\ 
+  subsidy & 0.0129 & 0.0130 & 0.99 & 0.3203 \\ 
+  control & 0.0341 & 0.0141 & 2.43 & 0.0153 \\ 
+   \hline
+\end{tabular}
+\caption{Linear Probability Model of Engagement} 
+\end{table}
