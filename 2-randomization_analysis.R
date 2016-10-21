@@ -102,12 +102,24 @@ test2 <- prop.test(table(dat1$engaged, dat1$address_treat)[,c(2,3)],
 test3 <- prop.test(table(dat1$engaged, dat1$address_treat)[,c(1,3)], 
           correct=FALSE)
 
-cat("The difference between Group A (no lookup) and the other two groups is statistically 
-    significant.")
+#cat("The difference between Group A (no lookup) and the other two groups is 
+# statistically significant.")
 
 ## 2. Logistic Regression------------------------------------------------------
 
 ### Variables 
+
+#### Redo - Category A (No geographic lookup)
+dat1$nolookup[dat1$address_treat == "A"] <- 1
+dat1$nolookup[dat1$address_treat != "A"] <- 0
+
+#### Redo - Category B (Lookup, no prime)
+dat1$noprime[dat1$address_treat == "B"] <- 1
+dat1$noprime[dat1$address_treat != "B"] <- 0
+
+#### Redo - Category c (Lookup, with prime)
+dat1$prime[dat1$address_treat == "C"] <- 1
+dat1$prime[dat1$address_treat != "C"] <- 0
 
 #### Number of days in system (April 17 - date created)
 dat1$days[as.Date(dat1$created_at) == "2014-04-07"] <- 10
@@ -120,16 +132,34 @@ dat1$days[as.Date(dat1$created_at) == "2014-04-13"] <- 4
 dat1$days[as.Date(dat1$created_at) == "2014-04-14"] <- 3
 
 #### Channel category - Treatment 2 (Subsidy)
-dat1$control[dat1$USSD_number == "*120*4729#"] <- 1
-dat1$control[dat1$USSD_number != "*120*4729#"] <- 0
+dat1$subsidy[dat1$USSD_number == "*120*4729#"] <- 1
+dat1$subsidy[dat1$USSD_number != "*120*4729#"] <- 0
+
+#### Channel category - other 1 (magazine?)
+dat1$other1[dat1$USSD_number == "*120*7692*1#"] <- 1
+dat1$other1[dat1$USSD_number != "*120*7692*1#"] <- 0
+
+#### Channel category - Control
+dat1$control[dat1$USSD_number == "*120*7692*2#"] <- 1
+dat1$control[dat1$USSD_number != "*120*7692*2#"] <- 0
 
 #### Channel category - Treatment 1 (Lottery)
-dat1$control[dat1$USSD_number == "*120*4729#"] <- 1
-dat1$control[dat1$USSD_number != "*120*4729#"] <- 0
+dat1$lottery[dat1$USSD_number == "*120*7692*3#"] <- 1
+dat1$lottery[dat1$USSD_number != "*120*7692*3#"] <- 0
+
+#### Channel category - other 2 (???)
+dat1$other2[dat1$USSD_number == "*120*7692*8#"] <- 1
+dat1$other2[dat1$USSD_number != "*120*7692*8#"] <- 0
+
+#### Channel category - other 3 (???)
+dat1$other3[dat1$USSD_number == "*120*7692#"] <- 1
+dat1$other3[dat1$USSD_number != "*120*7692#"] <- 0
 
 ### Plain Logit - Feeling Thermometer Response
 
-mod1.1 <- glm(engaged ~ days +,
+mod1.1 <- glm(engaged ~ nolookup + prime +
+                days +
+                lottery + subsidy + control, 
               family=binomial(link="probit"), data = dat1)
 summary(mod1.1)
 
