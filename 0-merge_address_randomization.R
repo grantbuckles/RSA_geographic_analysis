@@ -9,10 +9,11 @@ rm(list=ls())
 library(foreign)
 library(dplyr)
 
-setwd("/Users/grantbuckles/Desktop/RSA_geographic_analysis")
-allocation <- read.csv("AllGroups646.csv")
-allocation_orig <- read.csv("recontactSample2014-04-14_oneRowFinal.csv")
-master <- read.csv("contacts-export20140617.csv")
+#setwd("/Users/grantbuckles/Desktop/RSA_geographic_analysis")
+data_dir <- "/Users/aaronerlich/Dropbox/RSA_RCT_SHARE/PK/data_raw"
+allocation <- read.csv(file.path(data_dir, "AllGroups646.csv"))
+allocation_orig <- read.csv(file.path(data_dir,"recontactSample2014-04-14_oneRowFinal.csv"))
+master <- read.csv(file.path(data_dir, "contacts-export20140617.csv"))
 
 #Check AllGroups646.csv against original allocation---------------------------
 allocation <- rename(allocation, msisdn = MSISDN)

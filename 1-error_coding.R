@@ -6,20 +6,43 @@
 
 library(stringr)
 
+training_set <- read.csv("hand-coding.csv")
+
+training_set$final_code <- NA
+training_set$final_code[training_set$correct_match ==1] <- training_set$error_cat[training_set$correct_match ==1]
+training_set$final_code[training_set$correct_match ==0] <- training_set$nomatch_code[training_set$correct_match ==0]
+
+
+
+
+training_set$three <- cut(training_set$error_cat, breaks = c(0,10,20))
+
 #remove test address
 dat <- filter(dat, raw_user_address != "12 main street pretoria")
 
+all_reg <- filter(dat, as.Date(dat$it_engagement_question) < as.Date("2014-04-18") & is_registered == "true") %>%
+  dplyr::select(key, is_registered, ward, msisdn, raw_user_address, raw_user_address_2, address_treat)
+
+gave_any_info <- table(all_reg$raw_user_address == "" & all_reg$raw_user_address_2 == "")
+prop.table(gave_any_info)
+
+all_reg2 <- filter(dat, as.Date(dat$it_engagement_question) >= as.Date("2014-04-18") & is_registered == "true") %>%
+  dplyr::select(delivery_class, is_registered, ward, msisdn, raw_user_address, raw_user_address_2, address_treat, it_engagement_question)
+
+huh <- filter(all_reg2, raw_user_address != "")
 #observations in raw_user_address to code 
-sum(dat$raw_user_address != "")
+sum(all_reg$raw_user_address != "")
 #observations in raw_user_address_2 to code
-sum(dat$raw_user_address_2 != "")
+sum(all_reg$raw_user_address_2 != "")
 
 #-------------------------------------------------------------------------------
   
 #Successful entries (i.e. those successfully assigned a value for "ward")------ 
-successes <- select(filter(dat, ward != "", ward != "unknown"), 
+successes <- select(filter(all_reg, ward != "", ward != "unknown"), 
                     raw_user_address, raw_user_address_2, ward)
 
+
+nrow(successes)/gave_any_info[1]
 #success on first try----------------------------------------------------------
 success_1 <- function(x){
   !grepl(" ", x)
@@ -77,10 +100,10 @@ summary(successes$misc)
   
 #Code errors
 
-#Remove successes from the data------------------------------------------------
-dat_1 <- select(filter(dat, raw_user_address != ""),
+#Remove successes from the all_rega------------------------------------------------
+all_reg_1 <- select(filter(all_reg, raw_user_address != ""),
                     key, raw_user_address, raw_user_address_2, ward)
-errors <- filter(dat_1, ward == "" | ward != "" & 
+errors <- filter(all_reg_1, ward == "" | ward != "" & 
                    raw_user_address_2 != "")
 
 #-------------------------------------------------------------------------------
